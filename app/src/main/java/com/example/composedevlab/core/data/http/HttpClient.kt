@@ -73,7 +73,7 @@ open class HttpClient {
 
         try {
             client.newCall(builder.build()).execute().use { resp ->
-                val respBytes = resp.body.bytes()
+                val respBytes = resp.body?.bytes()
                 return@withContext ResponseModel(
                     success = resp.isSuccessful,
                     statusCode = resp.code,

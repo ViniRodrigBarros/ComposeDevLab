@@ -9,7 +9,7 @@ activityCompose = "1.9.3"
 kotlin = "2.0.21"
 composeBom = "2024.11.00"
 okhttp = "4.12.0"
-dagger-hilt = "2.52"
+dagger-hilt = "2.57.1"
 ksp = "2.0.21-1.0.26"
 hilt-navigation-compose = "1.2.0"
 

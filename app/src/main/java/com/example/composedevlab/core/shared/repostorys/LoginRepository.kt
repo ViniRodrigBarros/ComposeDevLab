@@ -1,4 +1,4 @@
-package com.example.composedevlab.core.repostorys
+package com.example.composedevlab.core.shared.repostorys
 
 import com.example.composedevlab.core.data.http.AplicationBaseRequest
 import com.example.composedevlab.core.data.http.HttpClient

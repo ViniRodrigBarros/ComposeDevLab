@@ -1,8 +1,8 @@
 package com.example.composedevlab.core.di
 
 import android.content.Context
-import com.example.composedevlab.core.managers.StorageManager
-import com.example.composedevlab.core.repostorys.LoginRepository
+import com.example.composedevlab.core.shared.managers.StorageManager
+import com.example.composedevlab.core.shared.repostorys.LoginRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

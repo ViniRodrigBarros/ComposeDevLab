@@ -1,4 +1,4 @@
-package com.example.composedevlab.core.managers
+package com.example.composedevlab.core.shared.managers
 
 import android.content.Context
 import android.content.SharedPreferences

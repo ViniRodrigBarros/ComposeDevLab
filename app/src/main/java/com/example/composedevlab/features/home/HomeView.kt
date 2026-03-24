@@ -1,10 +1,9 @@
-package com.example.composedevlab.features.splash
+package com.example.composedevlab.features.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -12,40 +11,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composedevlab.ui.theme.ComposeDevLabTheme
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun SplashRoute(
-    viewModel: SplashViewModel = hiltViewModel(),
-    onNavigateToHome: () -> Unit
+fun HomeRoute(
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-
-    LaunchedEffect(viewModel) {
-        viewModel.navigationEvent.collectLatest {
-            onNavigateToHome()
-        }
-    }
-    
-    SplashScreen(state = state)
+    HomeScreen(state = state)
 }
 
 @Composable
-fun SplashScreen(
-    state: SplashState
-) {
+fun HomeScreen(state: HomeState) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "Splash Screen - Search: ${state.searchText}")
+        Text(text = state.welcomeMessage)
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun SplashScreenPreview() {
+fun HomeScreenPreview() {
     ComposeDevLabTheme {
-        SplashScreen(state = SplashState(searchText = "Preview Mode"))
+        HomeScreen(state = HomeState())
     }
 }

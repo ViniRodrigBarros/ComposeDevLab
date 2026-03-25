@@ -10,11 +10,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.composedevlab.features.NavigationEvent
 import com.example.composedevlab.ui.theme.ComposeDevLabTheme
 
 @Composable
 fun HomeRoute(
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    onNavigate: (NavigationEvent) -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     HomeScreen(state = state)

@@ -5,15 +5,21 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.composedevlab.features.home.HomeRoute
+import com.example.composedevlab.features.onboarding.OnboardingRoute
 import com.example.composedevlab.features.splash.SplashRoute
 
 sealed class NavigationEvent {
     object GoToHome : NavigationEvent()
+
+    object GotoOnboarding : NavigationEvent()
 }
 
 sealed class Screen(val route: String) {
     object Splash : Screen("splash")
+    object Onboarding : Screen("onboarding")
     object Home : Screen("home")
+
+
 }
 
 @Composable
@@ -26,6 +32,11 @@ fun AppNavigation() {
                 navController.navigate(Screen.Home.route) {
                     popUpTo(Screen.Splash.route) { inclusive = true }
                 }
+            }
+
+            NavigationEvent.GotoOnboarding -> {
+                navController.navigate(Screen.Onboarding.route)
+
             }
         }
     }
@@ -40,6 +51,10 @@ fun AppNavigation() {
         
         composable(Screen.Home.route) {
             HomeRoute(onNavigate = onNavigate)
+        }
+
+        composable(Screen.Onboarding.route) {
+            OnboardingRoute(onNavigate = onNavigate)
         }
     }
 }

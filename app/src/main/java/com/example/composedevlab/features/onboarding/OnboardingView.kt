@@ -1,21 +1,29 @@
 package com.example.composedevlab.features.onboarding
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
+
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.airbnb.lottie.compose.*
+import com.example.composedevlab.core.data.models.OnboardingPageModel
 import com.example.composedevlab.features.NavigationEvent
 import com.example.composedevlab.ui.theme.ComposeDevLabTheme
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 fun OnboardingRoute(
@@ -30,28 +38,133 @@ fun OnboardingRoute(
         }
     }
 
-    OnboardingScreen(state = state)
+    OnboardingScreen(
+        state = state,
+        onFinish = { viewModel.onFinishOnboarding() }
+    )
 }
 
 @Composable
 fun OnboardingScreen(
-    state: OnboardingState
+    state: OnboardingState,
+    onFinish: () -> Unit
 ) {
-    Box(
+    val pagerState = rememberPagerState(pageCount = { state.pages.size })
+    val scope = rememberCoroutineScope()
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Blue),
-        contentAlignment = Alignment.Center
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        Text("Onboarding Screen")
-        // Conteúdo do Onboarding aqui
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(1f)
+        ) { pageIndex ->
+            OnboardingPageItem(page = state.pages[pageIndex])
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 32.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row {
+                repeat(state.pages.size) { index ->
+                    PagerIndicator(isSelected = pagerState.currentPage == index)
+                }
+            }
+
+            Button(
+                onClick = {
+                    if (pagerState.currentPage < state.pages.size - 1) {
+                        scope.launch {
+                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        }
+                    } else {
+                        onFinish()
+                    }
+                },
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Text(
+                    text = if (pagerState.currentPage < state.pages.size - 1) "Próximo" else "Começar",
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
     }
+}
+
+@Composable
+fun OnboardingPageItem(page: OnboardingPageModel) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(page.lottieRes))
+    
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        LottieAnimation(
+            composition = composition,
+            iterations = LottieConstants.IterateForever,
+            modifier = Modifier
+                .size(300.dp)
+                .weight(1f)
+        )
+        
+        Text(
+            text = page.title,
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        Text(
+            text = page.description,
+            fontSize = 16.sp,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+    }
+}
+
+@Composable
+fun PagerIndicator(isSelected: Boolean) {
+    val width by animateDpAsState(targetValue = if (isSelected) 25.dp else 10.dp)
+    
+    Box(
+        modifier = Modifier
+            .padding(2.dp)
+            .height(10.dp)
+            .width(width)
+            .clip(CircleShape)
+            .background(
+                if (isSelected) MaterialTheme.colorScheme.primary 
+                else MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
+            )
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun OnboardingScreenPreview() {
     ComposeDevLabTheme {
-        OnboardingScreen(state = OnboardingState())
+        OnboardingScreen(
+            state = OnboardingState(),
+            onFinish = {}
+        )
     }
 }

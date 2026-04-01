@@ -11,7 +11,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,10 +45,10 @@ fun SplashScreen(
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.boom))
     
     Box(
-        modifier = Modifier.fillMaxSize().background(Color.Blue),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center,
-
-
     ) {
         LottieAnimation(
             modifier = Modifier.size(400.dp),

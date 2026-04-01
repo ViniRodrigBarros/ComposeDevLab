@@ -1,6 +1,7 @@
 package com.example.composedevlab.core.di
 
 import android.content.Context
+import com.example.composedevlab.core.shared.managers.AppManager
 import com.example.composedevlab.core.shared.managers.StorageManager
 import com.example.composedevlab.core.shared.repostorys.LoginRepository
 import dagger.Module
@@ -24,5 +25,11 @@ object AppModule {
     @Singleton
     fun provideStorageManager(@ApplicationContext context: Context): StorageManager {
         return StorageManager(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppManager(storageManager: StorageManager): AppManager {
+        return AppManager(storageManager)
     }
 }
